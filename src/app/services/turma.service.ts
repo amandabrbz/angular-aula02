@@ -6,50 +6,21 @@ import { map } from 'rxjs/operators';
 import { Turma } from '../models/turma'
 import { Aluno } from '../models/aluno'
 import { Disciplina } from '../models/disciplina'
+import { HttpClient } from '@angular/common/http';
 
-const TURMAS = [
-  {
-    "id": "87382",
-    "disciplina": {
-      "codigo": "121",
-      "nome": "Fundamentos Web",
-    },
-    "ano": 2021,
-    "periodo": 1,
-    "alunos": [
-      {
-        "codigo": 1211,
-        "nome": "maria"
-      },
-    ],
-  },
-  {
-    "id": "45656",
-    "disciplina": {
-      "codigo": "1231d",
-      "nome": "Frameworks Web",
-    },
-    "ano": 2021,
-    "periodo": 2,
-    "alunos": [
-      {
-        "codigo": 1211,
-        "nome": "maria"
-      },
-    ],
-  },
-]
 @Injectable({
   providedIn: 'root'
 })
 export class TurmaService {
 
-  constructor() {
+  constructor(
+    private httpClient: HttpClient,
+  ) {
 
   }
 
   public get(): Observable<Turma[]> {
-    return of(TURMAS).pipe(
+    return this.httpClient.get<any[]>('http://localhost:3000/api/turmas').pipe(
       map(turmasRaw => turmasRaw.map(
         turmaRaw => new Turma (
           new Disciplina (
@@ -58,7 +29,7 @@ export class TurmaService {
           ),
           turmaRaw.ano,
           turmaRaw.periodo,
-          turmaRaw.alunos.map(raw => new Aluno (
+          turmaRaw.alunos.map((raw: any) => new Aluno (
             raw.codigo,
             raw.nome,
           )),
