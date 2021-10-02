@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -7,6 +7,17 @@ import { AppComponent } from './app.component';
 import { Disciplina } from './models/disciplina';
 import { Turma } from './models/turma';
 
+@Component({
+  selector: 'app-turma',
+  template: `
+  `,
+  styles: [`
+  `],
+})
+export class TurmaComponentMock {
+  @Input()
+  public turma!: Turma;
+}
 @Component({
   selector: 'app-lista-turmas',
   template: `
@@ -32,6 +43,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         ListaTurmasComponentMock,
+        TurmaComponentMock,
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(AppComponent);
@@ -79,9 +91,10 @@ describe('AppComponent', () => {
       ],
     );
     fixture.detectChanges();
-    expect(fixture.debugElement.query(
-      By.css('main')
-    ).nativeElement.textContent).toContain(app.turma.nome);
+    const turmaComp: TurmaComponentMock = fixture.debugElement.query(
+      By.directive(TurmaComponentMock)
+    ).componentInstance;
+    expect(turmaComp.turma).toBe(app.turma);
   });
 
   it('deve renderizar a mensagem padrão, quando não houver turma', () => {
