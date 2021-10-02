@@ -19,6 +19,10 @@ import { TurmaComponent } from './components/turma/turma.component';
     HttpClientModule,
   ],
   providers: [
+    {
+      provide: 'BASE_URL',
+      useValue: 'http://localhost:3000/api'
+    }
   ],
   bootstrap: [
     AppComponent,
